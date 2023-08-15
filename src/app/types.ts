@@ -1,10 +1,10 @@
-export interface Todo {
+export interface TodoType {
   id: number;
   title: string;
-  tasks?: Task[];
+  tasks?: TaskType[];
 }
 
-export interface Task {
+export interface TaskType {
   id: number;
   task: string;
   isDone: boolean;
