@@ -3,7 +3,9 @@ import { NextResponse } from "next/server";
 
 export const GET = async (req: Request, res: Response) => {
   try {
-    const todos = await prisma.todo.findMany();
+    const todos = await prisma.todo.findMany({
+      include: { tasks: true },
+    });
 
     return NextResponse.json(todos, { status: 200 });
   } catch (error) {

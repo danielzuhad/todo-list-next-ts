@@ -19,7 +19,9 @@ const inputVariants = cva(
 
 export interface InputProps
   extends Partial<InputHTMLAttributes<HTMLInputElement>>,
-    VariantProps<typeof inputVariants> {}
+    VariantProps<typeof inputVariants> {
+  // title: string;
+}
 
 export const Input: FunctionComponent<InputProps> = ({
   className,

@@ -25,7 +25,7 @@ export interface ButtonProps
   isLoading?: boolean;
 }
 
-const Button: FunctionComponent<ButtonProps> = ({
+const Submit: FunctionComponent<ButtonProps> = ({
   className,
   children,
   variant,
@@ -46,4 +46,4 @@ const Button: FunctionComponent<ButtonProps> = ({
   );
 };
 
-export default Button;
+export default Submit;

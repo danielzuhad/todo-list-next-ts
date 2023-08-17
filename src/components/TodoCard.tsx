@@ -29,13 +29,12 @@ export const TodoCard: FunctionComponent<CardProps> = ({
 }) => {
   return (
     <div className={cn(CardVariants({ variant, className }))}>
-      {/* <h2 className="w-full"></h2> */}
       <h2 className="w-full h-[50%] font-bold text-[2em] capitalize">
         {props.title}
       </h2>
       <div className="flex justify-between h-full ">
         <div className="w-[50%] h-[7vh] overflow-auto font-extralight text-sm ">
-          {props.tasks ? (
+          {props.tasks && props.tasks.length > 0 ? (
             props.tasks?.map((task) => (
               <ul key={task.id}>
                 <li>{task.task}</li>
@@ -45,18 +44,18 @@ export const TodoCard: FunctionComponent<CardProps> = ({
             <div>Buatlah beberapa Task </div>
           )}
         </div>
-        <div className="flex justify-center items-center p-5 border-2 rounded-full m-1 mr-5">
-          {props.tasks ? (
+        <div className="flex justify-center items-center px-5 border-2 rounded-full mr-5">
+          {props.tasks && props.tasks.length > 0 ? (
             <div>
               {Math.round(
                 (props.tasks.filter((task) => task.isDone).length /
-                  props.tasks.length) *
+                  props.tasks!.length) *
                   100
               )}
               %
             </div>
           ) : (
-            <div>0%</div>
+            <div>0 %</div>
           )}
         </div>
       </div>
