@@ -1,7 +1,8 @@
-import { Input } from "./components/Input";
-import Submit from "./components/Submit";
-import { TodoCard } from "./components/TodoCard";
-import { handleSubmit } from "./handlers/submitHandler";
+import CardSection from "@/components/CardSection";
+import { Input } from "../components/Input";
+import Submit from "../components/Submit";
+import { TodoCard } from "../components/TodoCard";
+import { handleSubmit } from "../handlers/submitHandler";
 
 export default function Home() {
   return (
@@ -17,8 +18,8 @@ export default function Home() {
       </div>
 
       {/* Task Card */}
-      <div className="mt-[4em] w-full">
-        <TodoCard />
+      <div className="mt-[4em] w-full flex justify-center">
+        <CardSection />
       </div>
     </div>
   );

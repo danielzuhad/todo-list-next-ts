@@ -21,3 +21,24 @@ h1 {
 span {
   font-size: clamp(0.8em, 2vw, 1em);
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f19f;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #8888887a;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
