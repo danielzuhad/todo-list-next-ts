@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { TodoCard } from "./TodoCard";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch, AppThunkDispatch } from "@/redux/store";
+import { RootState, AppThunkDispatch } from "@/redux/store";
 import { fetchTodos } from "@/app/api/fetch";
 
 export default function CardSection() {
