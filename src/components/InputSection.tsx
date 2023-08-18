@@ -3,9 +3,13 @@ import React, { useState } from "react";
 import { Input } from "./Input";
 import Submit from "./Submit";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { AppThunkDispatch } from "@/redux/store";
+import { fetchTodos } from "@/app/api/fetch";
 
 export default function InputSection() {
   const [title, setTitle] = useState<string>("");
+  const dispatch = useDispatch<AppThunkDispatch>();
 
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -32,14 +36,15 @@ export default function InputSection() {
       console.log("Response:", response);
       const responseData = await response.json();
 
+      dispatch(fetchTodos());
       setTitle("");
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Task Created",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      // Swal.fire({
+      //   position: "top-right",
+      //   icon: "success",
+      //   title: "Task Created",
+      //   showConfirmButton: false,
+      //   timer: 1500,
+      // });
     } catch (error) {
       console.error(error);
     }

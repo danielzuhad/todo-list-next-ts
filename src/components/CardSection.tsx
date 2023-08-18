@@ -30,7 +30,6 @@ export default function CardSection() {
       ) : (
         <div></div>
       )}
-      {/* (<TodoCard id={todos.id} title={todos.title} />)  */}
     </div>
   );
 }
