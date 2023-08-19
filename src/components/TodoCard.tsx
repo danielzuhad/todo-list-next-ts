@@ -1,8 +1,11 @@
+"use client";
 import { cva, VariantProps } from "class-variance-authority";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import { cn } from "@/lib/utils";
 import { TodoType } from "../app/types";
 import { TiDeleteOutline } from "react-icons/ti";
+import { BsPencilSquare } from "react-icons/bs";
+import { BsCheckSquare } from "react-icons/bs";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@/redux/store";
@@ -25,6 +28,7 @@ const CardVariants = cva(
 
 export interface CardProps extends TodoType, VariantProps<typeof CardVariants> {
   className?: string;
+  onClick?: () => void;
 }
 
 export const TodoCard: FunctionComponent<CardProps> = ({
@@ -33,6 +37,8 @@ export const TodoCard: FunctionComponent<CardProps> = ({
   ...props
 }) => {
   const dispatch = useDispatch<AppThunkDispatch>();
+  const [inputActive, setInputActive] = useState(false);
+  const [title, setTitle] = useState("");
 
   const handleDelete = async (id: number) => {
     const swalWithBootstrapButtons = Swal.mixin({
@@ -73,25 +79,100 @@ export const TodoCard: FunctionComponent<CardProps> = ({
     }
   };
 
+  const handleSubmit = async (id: number) => {
+    if (title === "") {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Title is empty",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3000/api/todo/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title }),
+      });
+      console.log("Response:", response);
+      const responseData = await response.json();
+
+      dispatch(fetchTodos());
+      setTitle("");
+      setInputActive(false);
+      // Swal.fire({
+      //   position: "top-right",
+      //   icon: "success",
+      //   title: "Task Created",
+      //   showConfirmButton: false,
+      //   timer: 1500,
+      // });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const activeHandler = () => {
+    setInputActive(!inputActive);
+  };
+
   return (
     <div className="hover:scale-110 duration-300">
       <div className={cn(CardVariants({ variant, className }))}>
-        <div className="flex justify-between ">
-          <h2 className="w-full h-[50%] font-bold text-[2em] capitalize">
-            {props.title}
-          </h2>
+        <div className="flex justify-between items-center">
+          <div className="flex justify-between w-full">
+            {!inputActive ? (
+              <h2 className="w-full h-[50%] font-bold text-[1.7em] capitalize">
+                {props.title}
+              </h2>
+            ) : (
+              <div className="flex justify-between items-center">
+                <input
+                  className="p-2 w-[12em] border-2 rounded-sm"
+                  type="text"
+                  placeholder="Masukan Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <BsCheckSquare
+                  size={22}
+                  className="hover:scale-125 ml-5"
+                  onClick={() => handleSubmit(props.id)}
+                />
+              </div>
+            )}
+
+            <div className="flex items-center">
+              <BsPencilSquare
+                className="hover:scale-125 mx-5"
+                size={22}
+                onClick={activeHandler}
+              />
+            </div>
+          </div>
           <TiDeleteOutline
-            size={38}
-            className="hover:scale-125 hover"
+            size={33}
+            className="hover:scale-125"
             onClick={() => handleDelete(props.id)}
           />
         </div>
+
         <div className="flex justify-between h-full items-center">
           <div className="w-[50%] h-[10vh] overflow-auto font-extralight text-sm ">
             {props.tasks && props.tasks.length > 0 ? (
               props.tasks?.map((task) => (
                 <ul key={task.id}>
-                  <li>{task.task}</li>
+                  {task.isDone === true ? (
+                    <li className="line-through	">{task.task}</li>
+                  ) : (
+                    <li>{task.task}</li>
+                  )}
                 </ul>
               ))
             ) : (
