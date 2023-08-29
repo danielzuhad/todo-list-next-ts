@@ -11,7 +11,6 @@ export default function Home() {
       </span>
       <InputSection />
       <CardSection />
-      <Modal />
     </div>
   );
 }
