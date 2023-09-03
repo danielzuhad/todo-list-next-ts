@@ -29,8 +29,6 @@ export default function CardSection() {
     setSelectedTodo(null);
   };
 
-  console.log(selectedTodo);
-
   return (
     <div className="flex-wrap flex gap-5 mt-[4em] w-full justify-center">
       {todos.length > 0 ? (

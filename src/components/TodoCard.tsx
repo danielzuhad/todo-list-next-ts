@@ -4,11 +4,11 @@ import { FunctionComponent, useState } from "react";
 import { cn } from "@/lib/utils";
 import { TodoType } from "../app/types";
 import { BsPencilSquare } from "react-icons/bs";
-import { DeleteHandle } from "@/handler/DeleteHandle";
-import { UpdateHandle } from "@/handler/UpdateHandle";
+import { DeleteTodo } from "@/handler/DeleteHandle";
+import { UpdateTodo } from "@/handler/UpdateHandle";
 
 const CardVariants = cva(
-  "inline-block sm:min-w-[18em] md:min-w-[22em] h-[20vh] rounded-md shadow-md  duration-300 cursor-pointer border-opacity-80 p-4 flex flex-col gap-3 hover:scale-110 animate-fade-up animate-ease-out hover:shadow-2xl",
+  "inline-block sm:min-w-[18em] md:min-w-[22em] h-[20vh] rounded-md shadow-md  duration-300 border-opacity-80 p-4 flex flex-col gap-3 hover:scale-110 animate-fade-up animate-ease-out hover:shadow-2xl",
   {
     variants: {
       variant: {
@@ -45,11 +45,11 @@ export const TodoCard: FunctionComponent<CardProps> = ({
       <div className="flex justify-between items-center">
         <div className="flex justify-between w-full">
           {!inputActive ? (
-            <h2 className="w-full h-[50%] font-bold text-[1.7em] capitalize overflow-hidden">
+            <h2 className="max-w-[80%] h-[50%] font-bold text-[1.7em] capitalize truncate">
               {props.title}
             </h2>
           ) : (
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-2">
               <input
                 className="p-2 w-[12em] border-2 rounded-sm"
                 type="text"
@@ -57,7 +57,7 @@ export const TodoCard: FunctionComponent<CardProps> = ({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
-              <UpdateHandle
+              <UpdateTodo
                 idProps={props.id}
                 setTitle={setTitle}
                 setInputActive={setInputActive}
@@ -66,13 +66,13 @@ export const TodoCard: FunctionComponent<CardProps> = ({
             </div>
           )}
 
-          <div className="flex items-center">
+          <div className="flex items-center mr-[-5px]">
             <BsPencilSquare
               className="hover:scale-125 mx-5"
               size={22}
               onClick={activeHandler}
             />
-            <DeleteHandle idProps={props.id} />
+            <DeleteTodo idProps={props.id} />
           </div>
         </div>
       </div>
@@ -110,7 +110,7 @@ export const TodoCard: FunctionComponent<CardProps> = ({
               %
             </div>
           ) : (
-            <div>0 %</div>
+            <div className="min-w-[2em]">0 %</div>
           )}
         </div>
       </div>

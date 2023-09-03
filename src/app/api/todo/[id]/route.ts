@@ -53,7 +53,7 @@ export const DELETE = async (req: Request) => {
       return NextResponse.json({ message: "Id Tidak Ditemukan" });
     }
 
-    return NextResponse.json({ message: "Id Terhapus" });
+    return NextResponse.json({ message: "Todo Terhapus" });
   } catch (error) {
     return NextResponse.json({ message: "Error", error }, { status: 500 });
   }

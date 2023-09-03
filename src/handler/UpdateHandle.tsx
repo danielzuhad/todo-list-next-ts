@@ -2,7 +2,7 @@
 import { useDispatch } from "react-redux";
 import { BsCheckSquare } from "react-icons/bs";
 import Swal from "sweetalert2";
-import { AppThunkDispatch } from "@/redux/store";
+import { AppThunkDispatch, store } from "@/redux/store";
 import { fetchTodos } from "@/app/api/fetch";
 
 type UpdateHandleProps = {
@@ -12,7 +12,7 @@ type UpdateHandleProps = {
   title?: string;
 };
 
-export const UpdateHandle = ({
+export const UpdateTodo = ({
   idProps,
   setTitle,
   setInputActive,
@@ -42,7 +42,13 @@ export const UpdateHandle = ({
         body: JSON.stringify({ title }),
       });
       console.log("Response:", response);
-
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Title updated",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       dispatch(fetchTodos());
       setTitle("");
       setInputActive(false);
@@ -58,4 +64,101 @@ export const UpdateHandle = ({
       onClick={() => handleUpdate(idProps)}
     />
   );
+};
+
+export const UpdateTask = async ({
+  id,
+  updateTask,
+  setUpdateTask,
+  done,
+  setTasks,
+}: {
+  id: number;
+  updateTask?: string;
+  setUpdateTask?: React.Dispatch<React.SetStateAction<string>>;
+  done?: boolean;
+  setTasks: React.Dispatch<React.SetStateAction<any>>;
+}) => {
+  if (updateTask === "") {
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Title is empty",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+
+    return;
+  }
+
+  try {
+    const response = await fetch(`http://localhost:3000/api/task/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ task: updateTask, isDone: done }),
+    });
+    console.log("Response:", response);
+
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Task updated",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+
+    setTasks((prevTasks: any) =>
+      prevTasks.map((task: any) =>
+        task.id === id
+          ? { ...task, isInputActive: false, task: updateTask }
+          : task
+      )
+    );
+    setUpdateTask!("");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const UpdateTaskDone = async ({
+  id,
+  isDone,
+  setTasks,
+}: {
+  id: number;
+  isDone?: boolean;
+  setTasks: React.Dispatch<React.SetStateAction<any>>;
+}) => {
+  const isDoneChange = !isDone;
+
+  try {
+    const response = await fetch(`http://localhost:3000/api/task/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isDone: isDoneChange }),
+    });
+    console.log("Response:", response);
+
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Progress Updated",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+
+    setTasks((prevTasks: any) =>
+      prevTasks.map((task: any) =>
+        task.id === id
+          ? { ...task, isInputActive: false, isDone: isDoneChange }
+          : task
+      )
+    );
+  } catch (error) {
+    console.error(error);
+  }
 };
