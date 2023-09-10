@@ -34,7 +34,7 @@ export const UpdateTodo = ({
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/api/todo/${id}`, {
+      const response = await fetch(`/api/todo/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +92,7 @@ export const UpdateTask = async ({
   }
 
   try {
-    const response = await fetch(`http://localhost:3000/api/task/${id}`, {
+    const response = await fetch(`/api/task/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -134,7 +134,7 @@ export const UpdateTaskDone = async ({
   const isDoneChange = !isDone;
 
   try {
-    const response = await fetch(`http://localhost:3000/api/task/${id}`, {
+    const response = await fetch(`/api/task/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

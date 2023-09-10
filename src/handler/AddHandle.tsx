@@ -22,7 +22,7 @@ export const AddTodo = async ({ setTitle, title }: AddHandleProps) => {
   }
 
   try {
-    const response = await fetch("http://localhost:3000/api/todo", {
+    const response = await fetch("/api/todo", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +60,7 @@ export const AddTask = async ({
   }
 
   try {
-    const response = await fetch(`http://localhost:3000/api/task/${id}`, {
+    const response = await fetch(`/api/task/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

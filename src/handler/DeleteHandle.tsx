@@ -29,7 +29,7 @@ export const DeleteTodo = ({ idProps }: { idProps: number }) => {
     });
 
     if (result.isConfirmed) {
-      await fetch(`http://localhost:3000/api/todo/${id}`, {
+      await fetch(`/api/todo/${id}`, {
         method: "DELETE",
       });
 
@@ -82,7 +82,7 @@ export const DeleteTask = async ({
   });
 
   if (result.isConfirmed) {
-    await fetch(`http://localhost:3000/api/task/${id}`, {
+    await fetch(`/api/task/${id}`, {
       method: "DELETE",
     });
 
