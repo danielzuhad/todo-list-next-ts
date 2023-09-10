@@ -27,7 +27,7 @@ export interface CardProps extends TodoType, VariantProps<typeof CardVariants> {
   onClick?: () => void;
 }
 
-export const TodoCard: FunctionComponent<CardProps> = ({
+const TodoCard: FunctionComponent<CardProps> = ({
   className,
   variant,
   onClick,
@@ -117,3 +117,5 @@ export const TodoCard: FunctionComponent<CardProps> = ({
     </div>
   );
 };
+
+export default TodoCard;

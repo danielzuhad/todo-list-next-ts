@@ -1,6 +1,5 @@
 import CardSection from "@/components/CardSection";
 import InputSection from "@/components/InputSection";
-import Modal from "@/components/Modal";
 
 export default function Home() {
   return (

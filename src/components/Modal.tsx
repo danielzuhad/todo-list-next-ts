@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { TaskType, TodoType } from "@/app/types";
@@ -41,11 +40,14 @@ export interface ModalProps
 
 const Modal: FunctionComponent<ModalProps> = ({ variant, ...props }) => {
   const dispatch = useDispatch<AppThunkDispatch>();
-  const initialTasks =
-    props.tasks?.map((task) => ({
-      ...task,
-      isInputActive: false,
-    })) || [];
+  const initialTasks = useMemo(
+    () =>
+      props.tasks?.map((task) => ({
+        ...task,
+        isInputActive: false,
+      })) || [],
+    [props.tasks]
+  );
 
   // Use State
   const [tasks, setTasks] = useState(initialTasks);
@@ -54,7 +56,7 @@ const Modal: FunctionComponent<ModalProps> = ({ variant, ...props }) => {
 
   useEffect(() => {
     dispatch(fetchTodos());
-  }, [dispatch, initialTasks, tasks, props]);
+  }, [dispatch]);
 
   return (
     <div className={cn(modalVariants({ variant }))}>
@@ -95,77 +97,79 @@ const Modal: FunctionComponent<ModalProps> = ({ variant, ...props }) => {
 
           {/* Tasks */}
           <div className="flex flex-col items-center w-[100%] h-[65%]  gap-5 overflow-auto px-3">
-            {tasks.map((task, index) => (
-              <div
-                key={task.id}
-                className="flex items-center justify-between w-[100%]  border-2 p-2 animate-fade-up animate-ease-out animate-300"
-              >
-                {task.isInputActive ? (
-                  <div className="flex items-center w-full gap-1">
-                    <input
-                      onChange={(e) => setUpdateTask(e.target.value)}
-                      className="p-2 w-full border-2"
-                      value={updateTask}
-                    />
+            <Suspense fallback={<div>Loading</div>}>
+              {tasks.map((task, index) => (
+                <div
+                  key={task.id}
+                  className="flex items-center justify-between w-[100%]  border-2 p-2 animate-fade-up animate-ease-out animate-300"
+                >
+                  {task.isInputActive ? (
+                    <div className="flex items-center w-full gap-1">
+                      <input
+                        onChange={(e) => setUpdateTask(e.target.value)}
+                        className="p-2 w-full border-2"
+                        value={updateTask}
+                      />
+                    </div>
+                  ) : (
+                    <h3>{task.task}</h3>
+                  )}
+                  <div className="flex items-center gap-2 ml-2">
+                    {/* Problem is here ChatGPT */}
+                    <button
+                      onClick={() =>
+                        UpdateTaskDone({
+                          id: task.id,
+                          isDone: task.isDone,
+                          setTasks,
+                        })
+                      }
+                    >
+                      {task.isDone ? (
+                        <MdOutlineDoneAll size={30} color="green" />
+                      ) : (
+                        <TbProgress size={30} color="red" />
+                      )}
+                    </button>
+
+                    {/* Toggle Input */}
+                    <button
+                      onClick={() => {
+                        const updatedTasks = [...tasks];
+                        updatedTasks[index].isInputActive = !task.isInputActive;
+                        setTasks(updatedTasks);
+                      }}
+                    >
+                      <BsPencilSquare size={25} />
+                    </button>
+
+                    {/* Update Task */}
+                    <button>
+                      {task.isInputActive ? (
+                        <AiFillCheckSquare
+                          onClick={() => {
+                            UpdateTask({
+                              id: task.id,
+                              updateTask,
+                              setUpdateTask: setUpdateTask,
+                              setTasks,
+                            });
+                            setUpdateTask("");
+                          }}
+                          className="mr-2"
+                          size={30}
+                        />
+                      ) : (
+                        <TiDeleteOutline
+                          size={30}
+                          onClick={() => DeleteTask({ id: task.id, setTasks })}
+                        />
+                      )}
+                    </button>
                   </div>
-                ) : (
-                  <h3>{task.task}</h3>
-                )}
-                <div className="flex items-center gap-2 ml-2">
-                  {/* Problem is here ChatGPT */}
-                  <button
-                    onClick={() =>
-                      UpdateTaskDone({
-                        id: task.id,
-                        isDone: task.isDone,
-                        setTasks,
-                      })
-                    }
-                  >
-                    {task.isDone ? (
-                      <MdOutlineDoneAll size={30} color="green" />
-                    ) : (
-                      <TbProgress size={30} color="red" />
-                    )}
-                  </button>
-
-                  {/* Toggle Input */}
-                  <button
-                    onClick={() => {
-                      const updatedTasks = [...tasks];
-                      updatedTasks[index].isInputActive = !task.isInputActive;
-                      setTasks(updatedTasks);
-                    }}
-                  >
-                    <BsPencilSquare size={25} />
-                  </button>
-
-                  {/* Update Task */}
-                  <button>
-                    {task.isInputActive ? (
-                      <AiFillCheckSquare
-                        onClick={() => {
-                          UpdateTask({
-                            id: task.id,
-                            updateTask,
-                            setUpdateTask: setUpdateTask,
-                            setTasks,
-                          });
-                          setUpdateTask("");
-                        }}
-                        className="mr-2"
-                        size={30}
-                      />
-                    ) : (
-                      <TiDeleteOutline
-                        size={30}
-                        onClick={() => DeleteTask({ id: task.id, setTasks })}
-                      />
-                    )}
-                  </button>
                 </div>
-              </div>
-            ))}
+              ))}
+            </Suspense>
           </div>
         </div>
       </div>
