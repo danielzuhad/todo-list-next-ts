@@ -19,6 +19,7 @@ export const AddTodo = async ({ setTitle, title }: AddHandleProps) => {
       showConfirmButton: false,
       timer: 1500,
     });
+    return;
   }
 
   try {
