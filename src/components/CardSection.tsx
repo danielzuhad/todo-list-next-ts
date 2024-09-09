@@ -5,7 +5,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppThunkDispatch } from "@/redux/store";
 import { fetchTodos } from "@/app/api/fetch";
-import { TaskType, TodoType } from "@/app/types";
+import { TodoType } from "@/app/types";
 
 const Modal = React.lazy(() => import("./Modal"));
 const TodoCard = React.lazy(() => import("./TodoCard"));
@@ -19,7 +19,7 @@ export default function CardSection() {
 
   useEffect(() => {
     dispatch(fetchTodos());
-  }, [dispatch]);
+  }, [dispatch, isModalOpen]);
 
   const openModal = (todo: TodoType) => {
     setIsModalOpen(true);
